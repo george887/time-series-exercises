@@ -47,8 +47,8 @@ def numeric_hists(df, bins=20):
 
 def prep_store_data(df):
     '''This function takes in a df, converts sales date to date time, creates a column for
-    month and weekday, and calculates sales total and sales differential. Changes data
-    types to objects. Plots histograms of numeric data and Returns a df
+    month and weekday, renames sale_anount to quantity, and calculates sales total and sales differential. 
+    Changes data types to objects. Plots histograms of numeric data and Returns a df
     '''
 
     df = get_store_data()
@@ -60,6 +60,9 @@ def prep_store_data(df):
     # Creating month and day_of_week column 
     df['month'] = df.index.month
     df['day_of_week'] = df.index.day_name()
+    
+    # Renaming sale_amount to quantity
+    df = df.rename(columns = {'sale_amount': 'quantity'})
     
     # Creating calculated columns
     df = df.assign(sales_total = df.sale_amount * df.item_price)
@@ -83,17 +86,21 @@ def prep_german_data(df):
     sets the index to the datetime variable, adds a month and year column and fills
     nulls with 0s
     '''
-    # Acquires german data
-    df = opsd_germany_daily()
+
+    # Lower casing columns
+    df.columns = [column.lower() for column in df]
+
+    # Renaming wind and soloar column
+    df = df.rename(columns = {'Wind+Solar':'wind_and_solar'})
 
     #converting date to datetime format
-    df.Date = pd.to_datetime(energy.Date, format = '%Y-%m-%d')
+    df.date = pd.to_datetime(df.date, format = '%Y-%m-%d')
     
     # Creating histograms of numeric data
     numeric_hists(df)
     
     # Setting index to the datetime variable
-    df = df.set_index("Date").sort_index()
+    df = df.set_index("date").sort_index()
     
     # Adding month and year 
     df['month'] = df.index.month
