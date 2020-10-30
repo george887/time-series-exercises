@@ -65,7 +65,7 @@ def prep_store_data(df):
     df = df.rename(columns = {'sale_amount': 'quantity'})
     
     # Creating calculated columns
-    df = df.assign(sales_total = df.sale_amount * df.item_price)
+    df = df.assign(sales_total = df.quantity * df.item_price)
     df = df.assign(sales_diff = df.sales_total.diff(periods=1))
     
     # Change dtypes of numeric columns to object and category
