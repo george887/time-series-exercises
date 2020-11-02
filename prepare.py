@@ -90,8 +90,11 @@ def prep_german_data(df):
     # Lower casing columns
     df.columns = [column.lower() for column in df]
 
-    # Renaming wind and soloar column
-    df = df.rename(columns = {'Wind+Solar':'wind_and_solar'})
+    # Adding my own wind and solar column
+    df['wind_&_solar'] = df['wind'] + df['solar']
+
+    # Dropping wind + solar column
+    df = df.drop(columns =['wind+solar'])
 
     #converting date to datetime format
     df.date = pd.to_datetime(df.date, format = '%Y-%m-%d')
